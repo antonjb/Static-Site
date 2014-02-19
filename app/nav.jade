@@ -1,0 +1,5 @@
+nav
+    ul
+        each val, key in navigation().pages
+            - var href = relPath(val)
+            li: a(href="#{href}") #{key}

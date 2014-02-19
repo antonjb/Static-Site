@@ -1,0 +1,11 @@
+- var title = project.courseTitle + (project.assetTitle ? ' - ' + project.assetTitle : '')
+html
+    head
+        title= title
+        block styles
+    body
+        include nav
+        block content
+        include footer
+
+    block scripts

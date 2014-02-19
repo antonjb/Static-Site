@@ -1,0 +1,12 @@
+{
+	"asset": 1000,
+	"courseTitle": "Course title",
+	"assetTitle": "Asset title",
+	"copyright": null,
+	"version": "1.0",
+	"nav": {
+		"Page 1": "content/page_1.html",
+		"Page 2": "content/page_2.html",
+		"Page 3": "content/page_3.html"
+	}
+}
