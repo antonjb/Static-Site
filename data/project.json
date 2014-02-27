@@ -4,9 +4,9 @@
 	"assetTitle": "Asset title",
 	"copyright": null,
 	"version": "1.0",
-	"nav": {
-		"Page 1": "content/page_1.html",
-		"Page 2": "content/page_2.html",
-		"Page 3": "content/page_3.html"
-	}
+	"nav": [
+		{"title": "The First Page", "url": "content/page_1.html"},
+		{"title": "The Second Page", "url": "content/page_2.html"},
+		{"title": "The Third Page", "url": "content/page_3.html"}
+	]
 }
