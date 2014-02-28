@@ -1,0 +1,5 @@
+mixin link(href, name)
+	a(class!=attributes.class, href=href)= name
+
+mixin stylesheet(href)
+	link(rel="stylesheet" href=href)

@@ -1,11 +1,12 @@
 - var title = project.courseTitle + (project.assetTitle ? ' - ' + project.assetTitle : '')
+include ../includes/mixins
 html
     head
         title= title
         block styles
     body
-        include nav
+        include ../includes/nav
         block content
-        include footer
+        include ../includes/footer
 
     block scripts
