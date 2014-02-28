@@ -2,7 +2,7 @@
 
 module.exports = function(grunt){
 
-	var helpers = require('./helpers');
+	var helpers = require('./modules/helpers');
 
 	grunt.initConfig({
 
@@ -20,7 +20,7 @@ module.exports = function(grunt){
 				options: {
 					pretty: true,
 					data: function(dest, src){
-						return grunt.config('helpers').jade(dest, src);
+						return helpers.jade(dest, src);
 					}
 				},
 				files: [{

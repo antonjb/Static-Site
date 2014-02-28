@@ -1,0 +1,5 @@
+nav
+    ul
+        each page in navigation.pages
+            - var href = relPath(page.url)
+            li: a(href="#{href}" class=navigation.isCurrentPage(page.url) ? 'active' : '') #{page.title}
