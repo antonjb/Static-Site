@@ -1,0 +1,9 @@
+@import 'compass';
+@import 'mixins';
+@import 'variables';
+
+body {
+	background-color: $foo;
+	background-image: url('300x300.gif');
+	color: #f00;
+}
