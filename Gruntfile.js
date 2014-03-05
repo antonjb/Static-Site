@@ -45,10 +45,10 @@ module.exports = function(grunt){
 				sassDir: '<%= paths.app %>/<%= paths.css %>',
 				cssDir: '<%= paths.tmp %>/<%= paths.css %>',
 				imagesDir: '<%= paths.app %>/<%= paths.img %>',
-				// javascriptsDir: '<%= paths.app %>/<%= paths.js %>',
-				// fontsDir: '<%= paths.app %>/<%= paths.font %>',
-				// generatedImagesDir: '<%= paths.tmp %>/<%= paths.img %>',
-				// relativeAssets: true,
+				javascriptsDir: '<%= paths.app %>/<%= paths.js %>',
+				fontsDir: '<%= paths.app %>/<%= paths.font %>',
+				generatedImagesDir: '<%= paths.tmp %>/<%= paths.img %>',
+				relativeAssets: true,
 				assetCacheBuster: false
 			},
 			dev: {
@@ -60,7 +60,7 @@ module.exports = function(grunt){
 				options: {
 					cssDir:'<%= paths.dist %>/<%= paths.css %>',
 					environment: 'production',
-					outputStyle: 'compressed',
+					outputStyle: 'compressed'
 				}
 			}
 		},
