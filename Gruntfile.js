@@ -10,9 +10,16 @@ module.exports = function(grunt){
 		project: grunt.file.readJSON('data/project.json'),
 		
 		paths: {
+			// Top level
 			app: 'app',
 			dist: 'dist',
-			tmp: '.tmp'
+			tmp: '.tmp',
+			// Media Folders
+			shared: 'shared',
+			js: '<%= paths.shared %>/js',
+			css: '<%= paths.shared %>/css',
+			img: '<%= paths.shared %>/images',
+			font: '<%= paths.shared %>/fonts'
 		},
 
 		jade: {
@@ -30,6 +37,31 @@ module.exports = function(grunt){
 					dest: '<%= paths.tmp %>',
 					ext: '.html'
 				}]
+			}
+		},
+
+		compass: {
+			options: {
+				sassDir: '<%= paths.app %>/<%= paths.css %>',
+				cssDir: '<%= paths.tmp %>/<%= paths.css %>',
+				imagesDir: '<%= paths.app %>/<%= paths.img %>',
+				javascriptsDir: '<%= paths.app %>/<%= paths.js %>',
+				fontsDir: '<%= paths.app %>/<%= paths.font %>',
+				generatedImagesDir: '<%= paths.tmp %>/<%= paths.img %>',
+				relativeAssets: true,
+				assetCacheBuster: false
+			},
+			dev: {
+				options: {
+					debugInfo: true	
+				}
+			},
+			build: {
+				options: {
+					cssDir:'<%= paths.dist %>/<%= paths.css %>',
+					environment: 'production',
+					outputStyle: 'compressed'
+				}
 			}
 		},
 
@@ -58,10 +90,12 @@ module.exports = function(grunt){
 
 	grunt.loadNpmTasks('grunt-contrib-jade');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-compass');
 	grunt.loadNpmTasks('grunt-usemin');
 
 	grunt.registerTask('build', [
 		'jade',
+		'compass:build',
         'useminPrepare',
         'concat',
         'usemin'
