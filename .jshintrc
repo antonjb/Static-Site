@@ -1,0 +1,16 @@
+{
+	"camelcase": true,
+	"curly": true,
+	"eqeqeq": true,
+	"immed": true,
+	"latedef": true,
+	"noarg": true,
+	"undef": true,
+	"unused": true,
+	"trailing": true,
+	"smarttabs": true,
+	"browser": true,
+	"jquery": true,
+	"devel": false,
+	"globals": {}
+}

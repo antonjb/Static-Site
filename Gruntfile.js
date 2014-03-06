@@ -1,3 +1,4 @@
+/* jshint node:true */
 'use strict';
 
 module.exports = function(grunt){
@@ -22,6 +23,8 @@ module.exports = function(grunt){
 			font: '<%= paths.shared %>/fonts'
 		},
 
+
+		// Jade target
 		jade: {
 			app: {
 				options: {
@@ -40,6 +43,8 @@ module.exports = function(grunt){
 			}
 		},
 
+
+		// Compass target
 		compass: {
 			options: {
 				sassDir: '<%= paths.app %>/<%= paths.css %>',
@@ -53,7 +58,7 @@ module.exports = function(grunt){
 			},
 			dev: {
 				options: {
-					debugInfo: true	
+					debugInfo: true
 				}
 			},
 			build: {
@@ -65,12 +70,29 @@ module.exports = function(grunt){
 			}
 		},
 
+
+		// JSHint target
+		jshint: {
+			// Manually load .jshintrc so options can be overridden
+			options: grunt.file.readJSON('.jshintrc'),
+			dev: {
+				// Allow `console` in dev
+				options: {devel: true},
+				src: [
+					'Gruntfile.js',
+					'<%= paths.app %>/<%= paths.js %>'
+				]},
+			build: '<%= jshint.dev.src %>'
+		},
+
+
+		// usemin target
 		useminPrepare: {
             options: {
                 dest: '<%= paths.dist %>',
                 flow: {
-                	steps: {'js': ['concat']},
-                	post: []
+					steps: {'js': ['concat']},
+					post: []
                 }
             },
             html: '<%= paths.tmp %>/foo.html'
@@ -91,6 +113,7 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks('grunt-contrib-jade');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-compass');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-usemin');
 
 	grunt.registerTask('build', [
