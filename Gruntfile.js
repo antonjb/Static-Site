@@ -3,6 +3,7 @@
 
 module.exports = function(grunt){
 
+	var _ = require('lodash');
 	var helpers = require('./modules/helpers');
 
 	grunt.initConfig({
@@ -74,7 +75,7 @@ module.exports = function(grunt){
 		// JSHint target
 		jshint: {
 			// Manually load .jshintrc so options can be overridden
-			options: grunt.file.readJSON('.jshintrc'),
+			options: _.extend({reporter: require('jshint-stylish')}, grunt.file.readJSON('.jshintrc')),
 			dev: {
 				// Allow `console` in dev
 				options: {devel: true},
