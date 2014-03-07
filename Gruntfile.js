@@ -84,9 +84,24 @@ module.exports = function(grunt){
 				options: {devel: true},
 				src: [
 					'Gruntfile.js',
-					'<%= paths.app %>/<%= paths.js %>'
+					'<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+					'!<%= paths.app %>/<%= paths.js %>/vendor/*',
+					'test/{,*/}*_spec.js'
 				]},
 			build: '<%= jshint.dev.src %>'
+		},
+
+
+		// Jasmine target
+		jasmine: {
+			test: {
+				src: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+				options: {
+					specs: 'test/{,*/}*_spec.js',
+					vendor: '<%= paths.app %>/<%= paths.js %>/vendor/*'
+
+				}
+			}
 		},
 
 
