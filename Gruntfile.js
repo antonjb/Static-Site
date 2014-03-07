@@ -6,6 +6,9 @@ module.exports = function(grunt){
 	var _ = require('lodash');
 	var helpers = require('./modules/helpers');
 
+	// Automatically load all grunt tasks
+	require('load-grunt-tasks')(grunt);
+
 	grunt.initConfig({
 
 		pkg: grunt.file.readJSON('package.json'),
@@ -109,13 +112,8 @@ module.exports = function(grunt){
 
 	});
 
+	// Init the helpers module
 	grunt.config('helpers', helpers(grunt));
-
-	grunt.loadNpmTasks('grunt-contrib-jade');
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-compass');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-usemin');
 
 	grunt.registerTask('build', [
 		'jade',
