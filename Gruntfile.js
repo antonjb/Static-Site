@@ -100,9 +100,39 @@ module.exports = function(grunt){
 				src: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
 				options: {
 					specs: 'test/{,*/}*_spec.js',
-					vendor: '<%= paths.app %>/<%= paths.js %>/vendor/*'
-
+					vendor: '<%= paths.app %>/<%= paths.js %>/vendor/'
 				}
+			}
+		},
+
+
+		// Watch target
+		watch: {
+			js: {
+				files: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+				tasks: ['jshint:dev'],
+				options: {
+					livereload: true
+				}
+			},
+			test: {
+				files: ['<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+						'test/{,*/}*_spec.js'],
+				tasks: ['jshint:dev', 'jasmine']
+			},
+			compass: {
+				files: '<%= paths.app %>/<%= paths.css %>/{,*/}*.{sass,scss}',
+				tasks: ['compass:dev']
+			},
+			livereload:{
+				options: {
+					livereload: true
+				},
+				files: [
+					'<%= paths.tmp %>/**/*.html',
+					'<%= paths.tmp %>/<% paths.css %>/{,*/}*.css',
+					'<%= paths.app %>/<% paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
+				]
 			}
 		},
 
