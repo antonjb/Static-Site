@@ -87,8 +87,10 @@ module.exports = function(grunt){
 					'<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
 					'!<%= paths.app %>/<%= paths.js %>/vendor/*',
 					'test/{,*/}*_spec.js'
-				]},
-			build: '<%= jshint.dev.src %>'
+				]
+			},
+			build: ['<%= jshint.dev.src %>',
+					'!test/{,*/}*_spec.js']
 		},
 
 
