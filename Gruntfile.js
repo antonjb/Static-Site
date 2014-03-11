@@ -30,18 +30,27 @@ module.exports = function(grunt){
 
 		// Jade target
 		jade: {
-			app: {
-				options: {
-					pretty: true,
-					data: function(dest, src){
-						return helpers.jade(dest, src);
-					}
-				},
+			options: {
+				pretty: true,
+				data: function(dest, src){
+					return helpers.jade(dest, src);
+				}
+			},
+			dev: {
 				files: [{
 					expand: true,
 					cwd: '<%= paths.app %>/',
 					src: '**/*.html.jade',
 					dest: '<%= paths.tmp %>',
+					ext: '.html'
+				}]
+			},
+			build: {
+				files: [{
+					expand: true,
+					cwd: '<%= paths.app %>/',
+					src: '**/*.html.jade',
+					dest: '<%= paths.dist %>',
 					ext: '.html'
 				}]
 			}
@@ -137,6 +146,33 @@ module.exports = function(grunt){
 		},
 
 
+		// Server target
+		connect: {
+			options: {
+				port: 4567,
+				keepalive: true,
+				livereload: 35729, // Default port
+				hostname: 'localhost'
+			},
+			dev: {
+				options: {
+					open: true,
+					base: ['<%= paths.tmp %>', 
+						   '<%= paths.app %>']
+
+				}
+			}
+		},
+
+		// Concurrent target
+		concurrent: {
+			dev: [
+				'compass:dev',
+				'jade:dev'
+			]
+		}
+
+
 		// usemin target
 		useminPrepare: {
             options: {
@@ -161,6 +197,10 @@ module.exports = function(grunt){
 
 	// Init the helpers module
 	grunt.config('helpers', helpers(grunt));
+
+	grunt.registerTask('dev', function(){
+
+	});
 
 	grunt.registerTask('build', [
 		'jade',
