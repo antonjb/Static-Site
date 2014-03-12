@@ -16,8 +16,8 @@ module.exports = function(grunt){
 		
 		paths: {
 			// Top level
-			app: 'app',
-			dist: 'dist',
+			source: 'source',
+			build: 'build',
 			tmp: '.tmp',
 			// Media Folders
 			shared: 'shared',
@@ -41,7 +41,7 @@ module.exports = function(grunt){
 				},
 				files: [{
 					expand: true,
-					cwd: '<%= paths.app %>/',
+					cwd: '<%= paths.source %>/',
 					src: '**/*.html.jade',
 					dest: '<%= paths.tmp %>',
 					ext: '.html'
@@ -50,9 +50,9 @@ module.exports = function(grunt){
 			build: {
 				files: [{
 					expand: true,
-					cwd: '<%= paths.app %>/',
+					cwd: '<%= paths.source %>/',
 					src: '**/*.html.jade',
-					dest: '<%= paths.dist %>',
+					dest: '<%= paths.build %>',
 					ext: '.html'
 				}]
 			}
@@ -62,11 +62,11 @@ module.exports = function(grunt){
 		// Compass target
 		compass: {
 			options: {
-				sassDir: '<%= paths.app %>/<%= paths.css %>',
+				sassDir: '<%= paths.source %>/<%= paths.css %>',
 				cssDir: '<%= paths.tmp %>/<%= paths.css %>',
-				imagesDir: '<%= paths.app %>/<%= paths.img %>',
-				javascriptsDir: '<%= paths.app %>/<%= paths.js %>',
-				fontsDir: '<%= paths.app %>/<%= paths.font %>',
+				imagesDir: '<%= paths.source %>/<%= paths.img %>',
+				javascriptsDir: '<%= paths.source %>/<%= paths.js %>',
+				fontsDir: '<%= paths.source %>/<%= paths.font %>',
 				generatedImagesDir: '<%= paths.tmp %>/<%= paths.img %>',
 				relativeAssets: true,
 				assetCacheBuster: false
@@ -78,7 +78,7 @@ module.exports = function(grunt){
 			},
 			build: {
 				options: {
-					cssDir:'<%= paths.dist %>/<%= paths.css %>',
+					cssDir:'<%= paths.build %>/<%= paths.css %>',
 					environment: 'production',
 					outputStyle: 'compressed'
 				}
@@ -95,8 +95,8 @@ module.exports = function(grunt){
 				options: {devel: true},
 				src: [
 					'Gruntfile.js',
-					'<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
-					'!<%= paths.app %>/<%= paths.js %>/vendor/*',
+					'<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
+					'!<%= paths.source %>/<%= paths.js %>/vendor/*',
 					'test/{,*/}*_spec.js'
 				]
 			},
@@ -108,10 +108,10 @@ module.exports = function(grunt){
 		// Jasmine target
 		jasmine: {
 			test: {
-				src: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+				src: '<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
 				options: {
 					specs: 'test/{,*/}*_spec.js',
-					vendor: '<%= paths.app %>/<%= paths.js %>/vendor/'
+					vendor: '<%= paths.source %>/<%= paths.js %>/vendor/'
 				}
 			}
 		},
@@ -120,26 +120,26 @@ module.exports = function(grunt){
 		// Watch target
 		watch: {
 			jade: {
-				files: '<%= paths.app %>/**/*.jade',
+				files: '<%= paths.source %>/**/*.jade',
 				tasks: ['jade:dev']
 			},
 			grunt: {
 				files: 'Gruntfile.js'
 			},
 			js: {
-				files: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+				files: '<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
 				tasks: ['jshint:dev'],
 				options: {
 					livereload: true
 				}
 			},
 			test: {
-				files: ['<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
+				files: ['<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
 						'test/{,*/}*_spec.js'],
 				tasks: ['jshint:dev', 'jasmine']
 			},
 			compass: {
-				files: '<%= paths.app %>/<%= paths.css %>/{,*/}*.{sass,scss}',
+				files: '<%= paths.source %>/<%= paths.css %>/{,*/}*.{sass,scss}',
 				tasks: ['compass:dev']
 			},
 			livereload:{
@@ -149,7 +149,7 @@ module.exports = function(grunt){
 				files: [
 					'<%= paths.tmp %>/**/*.html',
 					'<%= paths.tmp %>/<%= paths.css %>/{,*/}*.css',
-					'<%= paths.app %>/<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
+					'<%= paths.source %>/<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
 				]
 			}
 		},
@@ -166,7 +166,7 @@ module.exports = function(grunt){
 				options: {
 					open: true,
 					base: ['<%= paths.tmp %>',
-						   '<%= paths.app %>']
+						   '<%= paths.source %>']
 
 				}
 			}
@@ -185,7 +185,7 @@ module.exports = function(grunt){
 		// usemin target
 		useminPrepare: {
             options: {
-                dest: '<%= paths.dist %>',
+                dest: '<%= paths.build %>',
                 flow: {
 					steps: {'js': ['concat']},
 					post: []
@@ -196,7 +196,7 @@ module.exports = function(grunt){
 
         usemin: {
             options: {
-                assetsDirs: ['<%= paths.dist %>/']
+                assetsDirs: ['<%= paths.build %>/']
             },
             html: ['<%= paths.tmp %>/{,*/}*.html'],
             css: ['<%= paths.tmp %>/styles/{,*/}*.css']
