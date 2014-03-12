@@ -30,18 +30,29 @@ module.exports = function(grunt){
 
 		// Jade target
 		jade: {
-			app: {
+			options: {
+				data: function(dest, src){
+					return helpers.jade(dest, src);
+				}
+			},
+			dev: {
 				options: {
-					pretty: true,
-					data: function(dest, src){
-						return helpers.jade(dest, src);
-					}
+					pretty: true
 				},
 				files: [{
 					expand: true,
 					cwd: '<%= paths.app %>/',
 					src: '**/*.html.jade',
 					dest: '<%= paths.tmp %>',
+					ext: '.html'
+				}]
+			},
+			build: {
+				files: [{
+					expand: true,
+					cwd: '<%= paths.app %>/',
+					src: '**/*.html.jade',
+					dest: '<%= paths.dist %>',
 					ext: '.html'
 				}]
 			}
@@ -108,6 +119,13 @@ module.exports = function(grunt){
 
 		// Watch target
 		watch: {
+			jade: {
+				files: '<%= paths.app %>/**/*.jade',
+				tasks: ['jade:dev']
+			},
+			grunt: {
+				files: 'Gruntfile.js'
+			},
 			js: {
 				files: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
 				tasks: ['jshint:dev'],
@@ -130,10 +148,37 @@ module.exports = function(grunt){
 				},
 				files: [
 					'<%= paths.tmp %>/**/*.html',
-					'<%= paths.tmp %>/<% paths.css %>/{,*/}*.css',
-					'<%= paths.app %>/<% paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
+					'<%= paths.tmp %>/<%= paths.css %>/{,*/}*.css',
+					'<%= paths.app %>/<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
 				]
 			}
+		},
+
+
+		// Server target
+		connect: {
+			options: {
+				port: 4567,
+				livereload: 35729, // Default port
+				hostname: 'localhost'
+			},
+			dev: {
+				options: {
+					open: true,
+					base: ['<%= paths.tmp %>',
+						   '<%= paths.app %>']
+
+				}
+			}
+		},
+
+
+		// Concurrent target
+		concurrent: {
+			dev: [
+				'compass:dev',
+				'jade:dev'
+			]
 		},
 
 
@@ -162,8 +207,18 @@ module.exports = function(grunt){
 	// Init the helpers module
 	grunt.config('helpers', helpers(grunt));
 
+	// Task when developing
+	grunt.registerTask('dev', function(){
+		grunt.task.run([
+			'concurrent:dev',
+			'connect:dev',
+			'watch'
+		]);
+	});
+
+	// Task for building
 	grunt.registerTask('build', [
-		'jade',
+		'jade:build',
 		'compass:build',
         'useminPrepare',
         'concat',
