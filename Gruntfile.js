@@ -31,12 +31,14 @@ module.exports = function(grunt){
 		// Jade target
 		jade: {
 			options: {
-				pretty: true,
 				data: function(dest, src){
 					return helpers.jade(dest, src);
 				}
 			},
 			dev: {
+				options: {
+					pretty: true
+				},
 				files: [{
 					expand: true,
 					cwd: '<%= paths.app %>/',
@@ -117,6 +119,13 @@ module.exports = function(grunt){
 
 		// Watch target
 		watch: {
+			jade: {
+				files: '<%= paths.app %>/**/*.jade',
+				tasks: ['jade:dev']
+			},
+			grunt: {
+				files: 'Gruntfile.js'
+			},
 			js: {
 				files: '<%= paths.app %>/<%= paths.js %>/{,*/}*.js',
 				tasks: ['jshint:dev'],
@@ -139,8 +148,8 @@ module.exports = function(grunt){
 				},
 				files: [
 					'<%= paths.tmp %>/**/*.html',
-					'<%= paths.tmp %>/<% paths.css %>/{,*/}*.css',
-					'<%= paths.app %>/<% paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
+					'<%= paths.tmp %>/<%= paths.css %>/{,*/}*.css',
+					'<%= paths.app %>/<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
 				]
 			}
 		},
@@ -150,19 +159,19 @@ module.exports = function(grunt){
 		connect: {
 			options: {
 				port: 4567,
-				keepalive: true,
 				livereload: 35729, // Default port
 				hostname: 'localhost'
 			},
 			dev: {
 				options: {
 					open: true,
-					base: ['<%= paths.tmp %>', 
+					base: ['<%= paths.tmp %>',
 						   '<%= paths.app %>']
 
 				}
 			}
 		},
+
 
 		// Concurrent target
 		concurrent: {
@@ -170,7 +179,7 @@ module.exports = function(grunt){
 				'compass:dev',
 				'jade:dev'
 			]
-		}
+		},
 
 
 		// usemin target
@@ -198,12 +207,18 @@ module.exports = function(grunt){
 	// Init the helpers module
 	grunt.config('helpers', helpers(grunt));
 
+	// Task when developing
 	grunt.registerTask('dev', function(){
-
+		grunt.task.run([
+			'concurrent:dev',
+			'connect:dev',
+			'watch'
+		]);
 	});
 
+	// Task for building
 	grunt.registerTask('build', [
-		'jade',
+		'jade:build',
 		'compass:build',
         'useminPrepare',
         'concat',

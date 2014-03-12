@@ -3,7 +3,10 @@ node_modules/
 .tmp/
 dist/
 .sass-cache
+
 *.gif
 *.jpg
 *.jpeg
 *.png
+*.svg
+*.webp
