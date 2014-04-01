@@ -24,7 +24,8 @@ module.exports = function(grunt){
             js: '<%= paths.shared %>/js',
             css: '<%= paths.shared %>/css',
             img: '<%= paths.shared %>/images',
-            font: '<%= paths.shared %>/fonts'
+            font: '<%= paths.shared %>/fonts',
+            media: '<%= paths.shared %>/media'
         },
 
 
@@ -160,7 +161,7 @@ module.exports = function(grunt){
             options: {
                 port: 4567,
                 livereload: 35729, // Default port
-                hostname: 'localhost'
+                hostname: '0.0.0.0'
             },
             dev: {
                 options: {
@@ -174,9 +175,44 @@ module.exports = function(grunt){
 
 
         // Clean target
-        clean : {
+        clean: {
             build: '<%= paths.build %>/*',
             dev: '<%= paths.tmp %>'
+        },
+
+
+        // Copy target
+        copy: {
+            media: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= paths.source %>',
+                    dest: '<%= paths.build %>',
+                    src: [
+                        '<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}',
+                        '<%= paths.font %>/{,*/}*.*',
+                        '<%= paths.media %>/{,*/}*.*'
+                    ]
+                }]
+            },
+            compiled: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>',
+                    dest: '<%= paths.build %>',
+                    src: '**/*.{html,css}'
+                }]
+            },
+            vendor: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= paths.source %>',
+                    dest: '<%= paths.build %>',
+                    src: '<%= paths.js %>/vendor/*.*'
+                }]
+            }
         },
 
 
