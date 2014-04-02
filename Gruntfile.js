@@ -216,6 +216,19 @@ module.exports = function(grunt){
         },
 
 
+        // imagemin target
+        imagemin: {
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.source %>',
+                    dest: '<%= paths.build %>',
+                    src: '<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png}'
+                }]
+            }
+        },
+
+
         // Concurrent target
         concurrent: {
             dev: [
