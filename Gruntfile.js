@@ -29,6 +29,26 @@ module.exports = function(grunt){
         },
 
 
+        // Symlink target
+        symlink: {
+            options: {
+                overwrite: false
+            },
+            shared: {
+                src: '<%= paths.source %>/<%= paths.img %>',
+                dest: '<%= paths.tmp %>/<%= paths.img %>'
+            },
+            font: {
+                src: '<%= paths.source %>/<%= paths.font %>',
+                dest: '<%= paths.tmp %>/<%= paths.font %>'
+            },
+            js: {
+                src: '<%= paths.source %>/<%= paths.js %>',
+                dest: '<%= paths.tmp %>/<%= paths.js %>'
+            }
+        },
+
+
         // Jade target
         jade: {
             options: {
@@ -63,9 +83,9 @@ module.exports = function(grunt){
             options: {
                 sassDir: '<%= paths.source %>/<%= paths.css %>',
                 cssDir: '<%= paths.tmp %>/<%= paths.css %>',
-                imagesDir: '<%= paths.source %>/<%= paths.img %>',
-                javascriptsDir: '<%= paths.source %>/<%= paths.js %>',
-                fontsDir: '<%= paths.source %>/<%= paths.font %>',
+                imagesDir: '<%= paths.tmp %>/<%= paths.img %>',
+                javascriptsDir: '<%= paths.tmp %>/<%= paths.js %>',
+                fontsDir: '<%= paths.tmp %>/<%= paths.font %>',
                 generatedImagesDir: '<%= paths.tmp %>/<%= paths.img %>',
                 relativeAssets: true,
                 assetCacheBuster: false
@@ -275,6 +295,8 @@ module.exports = function(grunt){
     // Task when developing
     grunt.registerTask('dev', function(){
         grunt.task.run([
+            'clean:dev',
+            'symlink',
             'concurrent:dev',
             'connect:dev',
             'watch'
@@ -283,6 +305,7 @@ module.exports = function(grunt){
 
     // Task for building
     grunt.registerTask('build', [
+        'symlink',
         'clean:build',
         'concurrent:build',
         'useminPrepare',
