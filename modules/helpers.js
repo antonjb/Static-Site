@@ -88,7 +88,7 @@ exports = module.exports = function(grunt){
 	 * @returns {String} jade.pageTitle - The title for this page
 	 */
 	exports.jade = function(dest, src){
-		var cwd = grunt.task.current.target === 'build' ? projectDirs.build : projectDirs.dev;
+		var cwd = grunt.task.current.target === 'build' ? projectDirs.build : projectDirs.tmp;
 		dest = dest.replace(cwd + '/', '');
 
 		var destDir = path.dirname(dest),
