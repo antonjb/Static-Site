@@ -32,14 +32,12 @@ module.exports = function(grunt){
         // Jade target
         jade: {
             options: {
+                pretty: true,
                 data: function(dest, src){
                     return helpers.jade(dest, src);
                 }
             },
             dev: {
-                options: {
-                    pretty: true
-                },
                 files: [{
                     expand: true,
                     cwd: '<%= paths.source %>/',
@@ -186,7 +184,6 @@ module.exports = function(grunt){
             media: {
                 files: [{
                     expand: true,
-                    dot: true,
                     cwd: '<%= paths.source %>',
                     dest: '<%= paths.build %>',
                     src: [
@@ -201,13 +198,12 @@ module.exports = function(grunt){
                     expand: true,
                     cwd: '<%= paths.tmp %>',
                     dest: '<%= paths.build %>',
-                    src: '**/*.{html,css}'
+                    src: '**/*.css'
                 }]
             },
             vendor: {
                 files: [{
                     expand: true,
-                    dot: true,
                     cwd: '<%= paths.source %>',
                     dest: '<%= paths.build %>',
                     src: '<%= paths.js %>/vendor/*.*'
@@ -229,11 +225,24 @@ module.exports = function(grunt){
         },
 
 
+        // uglify target
+        uglify: {
+            options: {
+                preserveComments: 'some'
+            }
+        },
+
+
         // Concurrent target
         concurrent: {
             dev: [
                 'compass:dev',
                 'jade:dev'
+            ],
+            build: [
+                'jade:build',
+                'compass:build',
+                'imagemin'
             ]
         },
 
@@ -242,20 +251,20 @@ module.exports = function(grunt){
         useminPrepare: {
             options: {
                 dest: '<%= paths.build %>',
+                root: '<%= paths.source %>',
                 flow: {
-                    steps: {'js': ['concat']},
+                    steps: {'js': ['uglifyjs']},
                     post: []
                 }
             },
-            html: '<%= paths.tmp %>/foo.html'
+            html: '<%= paths.build %>/index.html'
         },
 
         usemin: {
             options: {
                 assetsDirs: ['<%= paths.build %>/']
             },
-            html: ['<%= paths.tmp %>/{,*/}*.html'],
-            css: ['<%= paths.tmp %>/styles/{,*/}*.css']
+            html: ['<%= paths.build %>/{,*/}*.html']
         }
 
     });
@@ -274,10 +283,11 @@ module.exports = function(grunt){
 
     // Task for building
     grunt.registerTask('build', [
-        'jade:build',
-        'compass:build',
+        'clean:build',
+        'concurrent:build',
         'useminPrepare',
-        'concat',
+        'uglify',
+        'copy',
         'usemin'
     ]);
 
