@@ -194,7 +194,7 @@ module.exports = function(grunt){
 
         // Clean target
         clean: {
-            build: '<%= paths.build %>/*',
+            build: ['<%= paths.build %>/*', './build.zip'],
             dev: '<%= paths.tmp %>'
         },
 
@@ -285,6 +285,18 @@ module.exports = function(grunt){
                 assetsDirs: ['<%= paths.build %>/']
             },
             html: ['<%= paths.build %>/{,*/}*.html']
+        },
+
+
+        // compress target
+        compress: {
+            build: {
+                options: {
+                    archive: 'build.zip',
+                    mode: 'zip'
+                },
+                files: [{src: './build/**'}]
+            }
         }
 
     });
@@ -311,7 +323,8 @@ module.exports = function(grunt){
         'useminPrepare',
         'uglify',
         'copy',
-        'usemin'
+        'usemin',
+        'compress'
     ]);
 
 };
