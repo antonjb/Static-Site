@@ -5,7 +5,8 @@ exports = module.exports = function(grunt){
 	
 	// Modules
 	var path = require('path'),
-		_ = require('lodash');
+		_ = require('lodash'),
+		imageSize = require('image-size');
 
 	_.str = require('underscore.string');
 	_.mixin(_.str.exports());
@@ -77,6 +78,61 @@ exports = module.exports = function(grunt){
 	};
 
 	/**
+	 * Converts val and name into a HTML attribute
+	 * @param {*} val - The value of the attribute. Can be empty for boolean attributes
+	 * @param {String} name - The name of the attribute
+	 * @return {String}
+	 */
+	var toHTMLAttribute = function(val, name){
+		// Check for boolean attributes
+		var attr = _.isUndefined(val) ? [' ', name] : [' ', name, '="', val.toString(), '"'];
+		return attr.join('');
+	};
+
+	/**
+	 * Returns a HTML tag
+	 * @param {String} name - The name of the tag
+	 * @param {String} attributes - The attributes as a string
+	 * @param {Boolean} open - Whether it's an open tag
+	 * @return {String}
+	 */
+	var tag = function(name, attributes, open) {
+		open = _.isBoolean(open) ? open : false;
+		return ['<', name, attributes, open ? '>' : '/>'].join('');
+	}
+
+	/**
+	 * Creates an image tag taking care of the src and image width and height
+	 * unless overwritten in the attributes property. Will look in the image directory
+	 * property from the gruntfile
+	 * @param {String} dest - The directory linking to the image
+	 * @param {String} src - The name of the image to link to. 
+	 * @param {Object} attributes - Object containing all the attributes
+	 * @returns {String}
+	 */
+	var imageTag = function(dest, src, attributes){
+		var remoteImg = src.indexOf('://') !== -1,
+			dimensions;
+
+		attributes = _.extend({alt: ' '}, attributes || {});
+
+		// Only getting dimensions for local images
+		if (!remoteImg) {
+			src = [projectDirs.img, src].join('/');
+			dimensions = imageSize(['source', src].join('/'));
+			// Default to attributes width or height over actual width and height
+			attributes.width = attributes.width || dimensions.width;
+			attributes.height = attributes.height || dimensions.height;
+			src = relPath(dest, src);
+		}
+
+		attributes = _.map(attributes, toHTMLAttribute);
+		attributes.unshift(toHTMLAttribute(src, 'src')); // Putting src first
+		
+		return tag('img', attributes.join(''));
+	};
+
+	/**
 	 * Helper functions specific to the Jade language (http://jade-lang.com/)
 	 * @param {String} dest - The destination of the file being exported
 	 * @param {String} src - The src files used to create the jade file
@@ -86,9 +142,11 @@ exports = module.exports = function(grunt){
 	 * @returns {Function(url)} jade.relPath - Returns the relative path to this page
 	 * @returns {Object} jade.project - The data from the project json file
 	 * @returns {String} jade.pageTitle - The title for this page
+	 * @returns {String} jade.imageTag - Creates an image tag with width and height set automatically
 	 */
 	exports.jade = function(dest, src){
-		var cwd = grunt.task.current.target === 'build' ? projectDirs.build : projectDirs.tmp;
+		var cwd = grunt.task.current.target === 'build' ? projectDirs.build : projectDirs.tmp,
+			srcDest = dest;
 		dest = dest.replace(cwd + '/', '');
 
 		var destDir = path.dirname(dest),
@@ -99,7 +157,8 @@ exports = module.exports = function(grunt){
 			relPath: _.partial(relPath, destDir),
 			navigation: navigationDetails(page),
 			project: projectData,
-			pageTitle: page && page.title || undefined
+			pageTitle: page && page.title || undefined,
+			imageTag: _.partial(imageTag, destDir)
 		};
 	}
 };
