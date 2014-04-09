@@ -185,6 +185,7 @@ module.exports = function(grunt){
                 options: {
                     open: true,
                     base: ['<%= paths.tmp %>',
+                           'node_modules/',
                            '<%= paths.source %>']
 
                 }
