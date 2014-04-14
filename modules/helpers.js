@@ -30,6 +30,8 @@ exports = module.exports = function(grunt){
 	 * @returns {String}
 	 */
 	var relPath = function(from, to){
+		// No point with a remote link
+		if (to.indexOf('://') !== -1) {return to;}
 		return path.relative(from, to);
 	};
 
