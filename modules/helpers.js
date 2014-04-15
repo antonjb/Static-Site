@@ -69,7 +69,7 @@ exports = module.exports = function(grunt){
 	 * @returns {Object|Undefined} nav.prevPage - The previous page available
 	 */
 	var navigationDetails = function(page, dest){
-		var pageIndex = _.indexOf(page);
+		var pageIndex = _.indexOf(projectData.nav, page);
 
 		return {
 			pages: projectData.nav,
