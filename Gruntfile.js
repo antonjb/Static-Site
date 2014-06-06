@@ -275,15 +275,15 @@ module.exports = function(grunt){
                 root: '<%= paths.source %>',
                 flow: {
                     steps: {'js': ['uglifyjs']},
-                    post: []
+                    post: {}
                 }
             },
-            html: '<%= paths.build %>/index.html'
+            html: '<%= paths.build %>/**/*.html'
         },
 
         usemin: {
             options: {
-                assetsDirs: ['<%= paths.build %>/']
+                assetsDirs: ['<%= paths.build %>']
             },
             html: ['<%= paths.build %>/{,*/}*.html']
         },

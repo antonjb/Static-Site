@@ -1,13 +1,19 @@
 node_modules/
 .DS_Store
+.DS_Store?
+.Spotlight-V100
 .tmp/
 build/
 dist/
 .sass-cache
+.Trashes
 
+*.zip
 *.gif
 *.jpg
 *.jpeg
 *.png
 *.svg
 *.webp
+*.webm
+*.mp4
