@@ -98,6 +98,9 @@ module.exports = function(grunt){
             build: {
                 options: {
                     cssDir:'<%= paths.build %>/<%= paths.css %>',
+                    imagesDir: '<%= paths.build %>/<%= paths.img %>',
+                    javascriptsDir: '<%= paths.build %>/<%= paths.js %>',
+                    fontsDir: '<%= paths.build %>/<%= paths.font %>',
                     environment: 'production',
                     outputStyle: 'compressed'
                 }
@@ -214,14 +217,6 @@ module.exports = function(grunt){
                     ]
                 }]
             },
-            compiled: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= paths.tmp %>',
-                    dest: '<%= paths.build %>',
-                    src: '**/*.css'
-                }]
-            },
             vendor: {
                 files: [{
                     expand: true,
@@ -320,10 +315,10 @@ module.exports = function(grunt){
     grunt.registerTask('build', [
         'symlink',
         'clean:build',
+        'copy',
         'concurrent:build',
         'useminPrepare',
         'uglify',
-        'copy',
         'usemin',
         'compress'
     ]);
