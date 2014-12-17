@@ -25,7 +25,22 @@ module.exports = function(grunt){
             css: '<%= paths.shared %>/css',
             img: '<%= paths.shared %>/images',
             font: '<%= paths.shared %>/fonts',
-            media: '<%= paths.shared %>/media'
+            media: '<%= paths.shared %>/media',
+            // tmp
+            tImg: '<%= paths.tmp %>/<%= paths.img %>',
+            tFont: '<%= paths.tmp %>/<%= paths.font %>',
+            tJs: '<%= paths.tmp %>/<%= paths.js %>',
+            tCss: '<%= paths.tmp %>/<%= paths.css %>',
+            // source
+            sImg: '<%= paths.source %>/<%= paths.img %>',
+            sFont: '<%= paths.source %>/<%= paths.font %>',
+            sJs: '<%= paths.source %>/<%= paths.js %>',
+            sCss: '<%= paths.source %>/<%= paths.css %>',
+            // build
+            bImg: '<%= paths.build %>/<%= paths.img %>',
+            bFont: '<%= paths.build %>/<%= paths.font %>',
+            bJs: '<%= paths.build %>/<%= paths.js %>',
+            bCss: '<%= paths.build %>/<%= paths.css %>'
         },
 
 
@@ -35,16 +50,16 @@ module.exports = function(grunt){
                 overwrite: false
             },
             shared: {
-                src: '<%= paths.source %>/<%= paths.img %>',
-                dest: '<%= paths.tmp %>/<%= paths.img %>'
+                src: '<%= paths.sImg %>',
+                dest: '<%= paths.tImg %>'
             },
             font: {
-                src: '<%= paths.source %>/<%= paths.font %>',
-                dest: '<%= paths.tmp %>/<%= paths.font %>'
+                src: '<%= paths.sFont %>',
+                dest: '<%= paths.tFont %>'
             },
             js: {
-                src: '<%= paths.source %>/<%= paths.js %>',
-                dest: '<%= paths.tmp %>/<%= paths.js %>'
+                src: '<%= paths.sJs %>',
+                dest: '<%= paths.tJs %>'
             }
         },
 
@@ -81,12 +96,12 @@ module.exports = function(grunt){
         // Compass target
         compass: {
             options: {
-                sassDir: '<%= paths.source %>/<%= paths.css %>',
-                cssDir: '<%= paths.tmp %>/<%= paths.css %>',
-                imagesDir: '<%= paths.tmp %>/<%= paths.img %>',
-                javascriptsDir: '<%= paths.tmp %>/<%= paths.js %>',
-                fontsDir: '<%= paths.tmp %>/<%= paths.font %>',
-                generatedImagesDir: '<%= paths.tmp %>/<%= paths.img %>',
+                sassDir: '<%= paths.sCss %>',
+                cssDir: '<%= paths.tCss %>',
+                imagesDir: '<%= paths.tImg %>',
+                javascriptsDir: '<%= paths.tJs %>',
+                fontsDir: '<%= paths.tFont %>',
+                generatedImagesDir: '<%= paths.tImg %>',
                 relativeAssets: true,
                 assetCacheBuster: false
             },
@@ -97,10 +112,10 @@ module.exports = function(grunt){
             },
             build: {
                 options: {
-                    cssDir:'<%= paths.build %>/<%= paths.css %>',
-                    imagesDir: '<%= paths.build %>/<%= paths.img %>',
-                    javascriptsDir: '<%= paths.build %>/<%= paths.js %>',
-                    fontsDir: '<%= paths.build %>/<%= paths.font %>',
+                    cssDir: '<%= paths.bCss %>',
+                    imagesDir: '<%= paths.bImg %>',
+                    javascriptsDir: '<%= paths.bJs %>',
+                    fontsDir: '<%= paths.bFont %>',
                     environment: 'production',
                     outputStyle: 'compressed'
                 }
@@ -117,8 +132,8 @@ module.exports = function(grunt){
                 options: {devel: true},
                 src: [
                     'Gruntfile.js',
-                    '<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
-                    '!<%= paths.source %>/<%= paths.js %>/vendor/*',
+                    '<%= paths.sJs %>/{,*/}*.js',
+                    '!<%= paths.sJs %>/vendor/*',
                     'test/{,*/}*_spec.js'
                 ]
             },
@@ -130,10 +145,10 @@ module.exports = function(grunt){
         // Jasmine target
         jasmine: {
             test: {
-                src: '<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
+                src: '<%= paths.sJs %>/{,*/}*.js',
                 options: {
                     specs: 'test/{,*/}*_spec.js',
-                    vendor: '<%= paths.source %>/<%= paths.js %>/vendor/'
+                    vendor: '<%= paths.sJs %>/vendor/'
                 }
             }
         },
@@ -149,19 +164,19 @@ module.exports = function(grunt){
                 files: 'Gruntfile.js'
             },
             js: {
-                files: '<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
+                files: '<%= paths.sJs %>/{,*/}*.js',
                 tasks: ['jshint:dev'],
                 options: {
                     livereload: true
                 }
             },
             test: {
-                files: ['<%= paths.source %>/<%= paths.js %>/{,*/}*.js',
+                files: ['<%= paths.sJs %>/{,*/}*.js',
                         'test/{,*/}*_spec.js'],
                 tasks: ['jshint:dev', 'jasmine']
             },
             compass: {
-                files: '<%= paths.source %>/<%= paths.css %>/{,*/}*.{sass,scss}',
+                files: '<%= paths.sCss %>/{,*/}*.{sass,scss}',
                 tasks: ['compass:dev']
             },
             livereload:{
@@ -170,8 +185,8 @@ module.exports = function(grunt){
                 },
                 files: [
                     '<%= paths.tmp %>/**/*.html',
-                    '<%= paths.tmp %>/<%= paths.css %>/{,*/}*.css',
-                    '<%= paths.source %>/<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
+                    '<%= paths.tCss %>/{,*/}*.css',
+                    '<%= paths.sImg %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}'
                 ]
             }
         },
