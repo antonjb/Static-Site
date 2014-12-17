@@ -7,6 +7,7 @@ build/
 dist/
 .sass-cache
 .Trashes
+.grunt/
 
 *.zip
 *.gif

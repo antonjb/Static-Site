@@ -145,10 +145,10 @@ module.exports = function(grunt){
         // Jasmine target
         jasmine: {
             test: {
-                src: '<%= paths.sJs %>/{,*/}*.js',
+                src: ['<%= paths.sJs %>/{,*/}*.js', '!<%= jasmine.test.options.vendor %>'],
                 options: {
                     specs: 'test/{,*/}*_spec.js',
-                    vendor: '<%= paths.sJs %>/vendor/'
+                    vendor: '<%= paths.sJs %>/vendor/*.js'
                 }
             }
         },
@@ -173,7 +173,7 @@ module.exports = function(grunt){
             test: {
                 files: ['<%= paths.sJs %>/{,*/}*.js',
                         'test/{,*/}*_spec.js'],
-                tasks: ['jshint:dev', 'jasmine']
+                tasks: ['jasmine']
             },
             compass: {
                 files: '<%= paths.sCss %>/{,*/}*.{sass,scss}',
