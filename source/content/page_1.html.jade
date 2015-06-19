@@ -4,7 +4,6 @@ block content
 	h1= pageTitle
 
 block scripts
-	// build:js ../shared/js/foo.min.js
-	script(src="shared/js/foo.js")
-	script(src="shared/js/bar.js")
-	// endbuild
+	<!-- [use:browserify] -->
+	+script('shared/js/foo.js')
+	<!-- [end] -->

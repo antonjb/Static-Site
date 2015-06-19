@@ -3,3 +3,9 @@ mixin link(href, name)
 
 mixin stylesheet(href)
 	link(rel="stylesheet" href=href)
+
+mixin script(href)
+	script(src=relPath(href))
+
+mixin image(src, attr)
+	!=imageTag(src, attr)

@@ -11,6 +11,8 @@
 	"smarttabs": true,
 	"browser": true,
 	"jquery": true,
+	"node": true,
+	"strict": true,
 	"devel": false,
 	"globals": {}
 }

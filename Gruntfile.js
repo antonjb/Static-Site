@@ -1,4 +1,3 @@
-/* jshint node:true */
 'use strict';
 
 module.exports = function(grunt){
@@ -56,10 +55,6 @@ module.exports = function(grunt){
             font: {
                 src: '<%= paths.sFont %>',
                 dest: '<%= paths.tFont %>'
-            },
-            js: {
-                src: '<%= paths.sJs %>',
-                dest: '<%= paths.tJs %>'
             }
         },
 
@@ -150,6 +145,12 @@ module.exports = function(grunt){
                     specs: 'test/{,*/}*_spec.js',
                     vendor: '<%= paths.sJs %>/vendor/*.js'
                 }
+            },
+            browserify: {
+                options: {
+                    specs: '<%= browserify.jasmine.dest %>',
+                    vendor: '<%= paths.sJs %>/vendor/*.js'
+                }
             }
         },
 
@@ -165,15 +166,15 @@ module.exports = function(grunt){
             },
             js: {
                 files: '<%= paths.sJs %>/{,*/}*.js',
-                tasks: ['jshint:dev'],
+                tasks: ['jshint:dev', 'useBrowserify:dev', 'browserify:dev'],
                 options: {
                     livereload: true
                 }
             },
             test: {
-                files: ['<%= paths.sJs %>/{,*/}*.js',
+                files: ['<%= paths.sJs %>/**/*.js',
                         'test/{,*/}*_spec.js'],
-                tasks: ['jasmine']
+                tasks: ['browserify:jasmine','jasmine:browserify']
             },
             compass: {
                 files: '<%= paths.sCss %>/{,*/}*.{sass,scss}',
@@ -203,7 +204,6 @@ module.exports = function(grunt){
                 options: {
                     open: true,
                     base: ['<%= paths.tmp %>',
-                           'node_modules/',
                            '<%= paths.source %>']
 
                 }
@@ -237,7 +237,10 @@ module.exports = function(grunt){
                     expand: true,
                     cwd: '<%= paths.source %>',
                     dest: '<%= paths.build %>',
-                    src: '<%= paths.js %>/vendor/*.*'
+                    src: [
+                        '<%= paths.js %>/vendor/jquery-1.11.0.min.js',
+                        '<%= paths.js %>/vendor/modernizr-2.7.1.min.js'
+                    ]
                 }]
             }
         },
@@ -256,10 +259,65 @@ module.exports = function(grunt){
         },
 
 
+        // Browserify target
+        browserify: {
+            jasmine: {
+                options: {
+                    browserifyOptions: {
+                        debug: true
+                    }
+                },
+                src: 'test/*_spec.js',
+                dest: 'test/browserifyspec.js'
+            }
+        },
+
+
+        // useBrowserify target
+        useBrowserify: {
+            options: {
+                root: '<%= paths.source %>'
+            },
+            dev: {
+                options: {
+                    dest: '<%= paths.tmp %>',
+                    taskOptions: {
+                        browserifyOptions: {
+                            debug: true
+                        }
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.tmp %>',
+                    src: '**/*.html'
+                }]
+            },
+            build: {
+                options: {
+                    dest: '<%= paths.build %>'
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.build %>',
+                    src: '**/*.html'
+                }]
+            }
+        },
+
+
         // uglify target
         uglify: {
             options: {
                 preserveComments: 'some'
+            },
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= paths.bJs %>',
+                    src: ['**/*.js', '!vendor/*.js'],
+                    dest: '<%= paths.bJs %>'
+                }]
             }
         },
 
@@ -268,34 +326,13 @@ module.exports = function(grunt){
         concurrent: {
             dev: [
                 'compass:dev',
-                'jade:dev'
+                'jade:dev',
             ],
             build: [
                 'jade:build',
                 'compass:build',
                 'imagemin'
             ]
-        },
-
-
-        // usemin target
-        useminPrepare: {
-            options: {
-                dest: '<%= paths.build %>',
-                root: '<%= paths.source %>',
-                flow: {
-                    steps: {'js': ['uglifyjs']},
-                    post: {}
-                }
-            },
-            html: '<%= paths.build %>/**/*.html'
-        },
-
-        usemin: {
-            options: {
-                assetsDirs: ['<%= paths.build %>']
-            },
-            html: ['<%= paths.build %>/{,*/}*.html']
         },
 
 
@@ -314,6 +351,7 @@ module.exports = function(grunt){
 
     // Init the helpers module
     grunt.config('helpers', helpers(grunt));
+    require('./modules/usebrowserify.js')(grunt);
 
     // Task when developing
     grunt.registerTask('dev', function(){
@@ -321,6 +359,8 @@ module.exports = function(grunt){
             'clean:dev',
             'symlink',
             'concurrent:dev',
+            'useBrowserify:dev',
+            'browserify:dev',
             'connect:dev',
             'watch'
         ]);
@@ -332,9 +372,9 @@ module.exports = function(grunt){
         'clean:build',
         'copy',
         'concurrent:build',
-        'useminPrepare',
-        'uglify',
-        'usemin',
+        'useBrowserify:build',
+        'browserify:build',
+        'uglify:build',
         'compress'
     ]);
 

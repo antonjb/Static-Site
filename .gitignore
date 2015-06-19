@@ -8,6 +8,7 @@ dist/
 .sass-cache
 .Trashes
 .grunt/
+test/browserifyspec.js
 
 *.zip
 *.gif

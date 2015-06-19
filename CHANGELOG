@@ -1,0 +1,7 @@
+v0.5.0
+changes:
+	- Added Browserify task and useBrowserify task
+	- Removed grunt-usemin
+	- Bumped dependencies
+	- Updated README.md
+	- Added new Jade mixins
