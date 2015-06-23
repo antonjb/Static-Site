@@ -43,22 +43,6 @@ module.exports = function(grunt){
         },
 
 
-        // Symlink target
-        symlink: {
-            options: {
-                overwrite: false
-            },
-            shared: {
-                src: '<%= paths.sImg %>',
-                dest: '<%= paths.tImg %>'
-            },
-            font: {
-                src: '<%= paths.sFont %>',
-                dest: '<%= paths.tFont %>'
-            }
-        },
-
-
         // Jade target
         jade: {
             options: {
@@ -102,7 +86,7 @@ module.exports = function(grunt){
             },
             dev: {
                 options: {
-                    debugInfo: true
+                    sourcemap: true
                 }
             },
             build: {
@@ -122,11 +106,11 @@ module.exports = function(grunt){
         jshint: {
             // Manually load .jshintrc so options can be overridden
             options: _.extend({reporter: require('jshint-stylish')}, grunt.file.readJSON('.jshintrc')),
+            gruntfile: 'Gruntfile.js',
             dev: {
                 // Allow `console` in dev
                 options: {devel: true},
                 src: [
-                    'Gruntfile.js',
                     '<%= paths.sJs %>/{,*/}*.js',
                     '!<%= paths.sJs %>/vendor/*',
                     'test/{,*/}*_spec.js'
@@ -140,13 +124,6 @@ module.exports = function(grunt){
         // Jasmine target
         jasmine: {
             test: {
-                src: ['<%= paths.sJs %>/{,*/}*.js', '!<%= jasmine.test.options.vendor %>'],
-                options: {
-                    specs: 'test/{,*/}*_spec.js',
-                    vendor: '<%= paths.sJs %>/vendor/*.js'
-                }
-            },
-            browserify: {
                 options: {
                     specs: '<%= browserify.jasmine.dest %>',
                     vendor: '<%= paths.sJs %>/vendor/*.js'
@@ -162,28 +139,20 @@ module.exports = function(grunt){
                 tasks: ['jade:dev']
             },
             grunt: {
-                files: 'Gruntfile.js'
+                files: 'Gruntfile.js',
+                tasks: ['jshint:gruntfile']
             },
             js: {
-                files: '<%= paths.sJs %>/{,*/}*.js',
-                tasks: ['jshint:dev', 'useBrowserify:dev', 'browserify:dev'],
-                options: {
-                    livereload: true
-                }
-            },
-            test: {
-                files: ['<%= paths.sJs %>/**/*.js',
-                        'test/{,*/}*_spec.js'],
-                tasks: ['browserify:jasmine','jasmine:browserify']
+                options: { livereload: true },
+                files: ['<%= paths.sJs %>/{,*/}*.js', 'test/{,*/}*_spec.js'],
+                tasks: ['jshint:dev', 'browserify:jasmine','jasmine:test', 'useBrowserify:dev', 'browserify:dev']
             },
             compass: {
                 files: '<%= paths.sCss %>/{,*/}*.{sass,scss}',
                 tasks: ['compass:dev']
             },
             livereload:{
-                options: {
-                    livereload: true
-                },
+                options: { livereload: true },
                 files: [
                     '<%= paths.tmp %>/**/*.html',
                     '<%= paths.tCss %>/{,*/}*.css',
@@ -220,27 +189,17 @@ module.exports = function(grunt){
 
         // Copy target
         copy: {
-            media: {
-                files: [{
+            all: {
+                files:[{
                     expand: true,
+                    filter: 'isFile',
                     cwd: '<%= paths.source %>',
                     dest: '<%= paths.build %>',
-                    src: [
-                        '<%= paths.img %>/{,*/}*.{gif,jpeg,jpg,png,svg,webp}',
-                        '<%= paths.font %>/{,*/}*.*',
-                        '<%= paths.media %>/{,*/}*.*'
-                    ]
-                }]
-            },
-            vendor: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= paths.source %>',
-                    dest: '<%= paths.build %>',
-                    src: [
-                        '<%= paths.js %>/vendor/jquery-1.11.0.min.js',
-                        '<%= paths.js %>/vendor/modernizr-2.7.1.min.js'
-                    ]
+                    src: ['**/*',
+                          '!**/*.{js,scss,sass,jade,gif,jpeg,jpg,png}',
+                          '<%= paths.js %>/vendor/jquery*.min.js',
+                          '<%= paths.js %>/vendor/modernizr*.min.js',
+                          '!.gitkeep']
                 }]
             }
         },
@@ -357,7 +316,6 @@ module.exports = function(grunt){
     grunt.registerTask('dev', function(){
         grunt.task.run([
             'clean:dev',
-            'symlink',
             'concurrent:dev',
             'useBrowserify:dev',
             'browserify:dev',
@@ -368,7 +326,6 @@ module.exports = function(grunt){
 
     // Task for building
     grunt.registerTask('build', [
-        'symlink',
         'clean:build',
         'copy',
         'concurrent:build',

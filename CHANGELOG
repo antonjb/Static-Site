@@ -2,6 +2,12 @@ v0.5.0
 changes:
 	- Added Browserify task and useBrowserify task
 	- Removed grunt-usemin
+	- Removed grunt-contrib-symlink
 	- Bumped dependencies
 	- Updated README.md
 	- Added new Jade mixins
+	- Added SASS source maps
+	- Removed SASS debug info
+	- Merged watch:test and watch:js tasks
+	- Merged jasmine:test and jasmine:browserify tasks
+	- Reworked copy task to be broader. Ignores file types that are processed, e.g. Jade.
