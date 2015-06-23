@@ -76,7 +76,6 @@ JavaScript files are dynamically added to Browserify's task through useBrowserif
 - [grunt-contrib-jade](https://github.com/gruntjs/grunt-contrib-jade)
 - [grunt-contrib-jasmine](https://github.com/gruntjs/grunt-contrib-jasmine)
 - [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint)
-- [grunt-contrib-symlink](https://github.com/gruntjs/grunt-contrib-symlink)
 - [grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify)
 - [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch)
 - [image-size](https://github.com/netroy/image-size)
